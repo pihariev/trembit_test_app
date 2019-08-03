@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trembit_test_app/route.dart' as AppRoute;
 
 void main() => runApp(MyApp());
 
@@ -11,6 +12,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(),
+      initialRoute: AppRoute.Route.ROOT,
     );
   }
 }
