@@ -29,6 +29,7 @@ dependencies:
   shared_preferences: ^0.5.3
   bloc: ^0.14.4
   flutter_bloc: ^0.20.0
+  rxdart: ^0.22.1
 
 dev_dependencies:
   flutter_test:
