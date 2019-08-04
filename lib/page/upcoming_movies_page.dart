@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trembit_test_app/bloc/upcoming_movies/upcoming_movies_bloc.dart';
 import 'package:trembit_test_app/bloc/upcoming_movies/upcoming_movies_event.dart';
 import 'package:trembit_test_app/data/network/network_client.dart';
+import 'package:trembit_test_app/model/navigation_bundle/movie_details_bundle.dart';
 import 'package:trembit_test_app/model/result.dart';
 import 'package:trembit_test_app/model/ui/movie.dart';
 import 'package:trembit_test_app/route.dart' as AppRoute;
@@ -91,6 +92,10 @@ class _UpcomingMoviesPageState extends State<UpcomingMoviesPage> {
       leading: Image.network(
         NetworkClient.buildImageUrl(movie.imageUrl),
       ),
+      onTap: () {
+        Navigator.of(context).pushNamed(AppRoute.Route.MOVIE_DETAILS_PAGE,
+            arguments: MovieDetailsBundle.withMovie(movie));
+      },
     );
   }
 }
