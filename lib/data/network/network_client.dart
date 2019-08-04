@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:trembit_test_app/data/network/auth_interceptor.dart';
 
 final _baseUrl = 'https://api.themoviedb.org/3/';
+final _imagesBaseUrl = 'https://image.tmdb.org/t/p/w500';
 
 final networkClient = NetworkClient._(dio: Dio(), baseUrl: _baseUrl);
 
@@ -33,6 +34,6 @@ class NetworkClient {
 
   static String buildImageUrl(String path) {
     assert(path != null);
-    return '$_baseUrl$path';
+    return '$_imagesBaseUrl$path';
   }
 }
