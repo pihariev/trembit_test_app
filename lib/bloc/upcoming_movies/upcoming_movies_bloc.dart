@@ -24,7 +24,7 @@ class UpcomingMoviesBloc extends Bloc<UpcomingMoviesEvent, dynamic> {
   get initialState => null;
 
   @override
-  Stream mapEventToState(UpcomingMoviesEvent event) {
+  Stream mapEventToState(UpcomingMoviesEvent event) async* {
     if (event is OnMovieItemClickEvent) {
       _mapOnMovieItemClickEvent(event);
     } else if (event is OnSettingsButtonClickEvent) {
@@ -32,8 +32,6 @@ class UpcomingMoviesBloc extends Bloc<UpcomingMoviesEvent, dynamic> {
     } else if (event is OnRefreshMoviesListEvent) {
       _mapOnRefreshMoviesListEvent();
     }
-
-    return null;
   }
 
   @override

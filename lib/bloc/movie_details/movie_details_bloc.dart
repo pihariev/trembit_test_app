@@ -24,9 +24,7 @@ class MovieDetailsBloc extends Bloc<dynamic, dynamic> {
   get initialState => null;
 
   @override
-  Stream mapEventToState(event) {
-    return null;
-  }
+  Stream mapEventToState(event) async* {}
 
   void _fetchMovie(int movieId) async {
     final result = await movieRepository.getMovie(movieId);

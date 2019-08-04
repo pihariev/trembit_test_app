@@ -25,14 +25,12 @@ class SettingsBloc extends Bloc<SettingsEvent, dynamic> {
   get initialState => null;
 
   @override
-  Stream mapEventToState(SettingsEvent event) {
+  Stream mapEventToState(SettingsEvent event) async* {
     if (event is OnShowNotificationsToggleEvent) {
       _mapOnShowNotificationsToggleEvent(event);
     } else if (event is OnNotificationsTimespanChangedEvent) {
       _mapOnNotificationsTimespanChangedEvent(event);
     }
-
-    return null;
   }
 
   @override
@@ -55,11 +53,13 @@ class SettingsBloc extends Bloc<SettingsEvent, dynamic> {
       OnShowNotificationsToggleEvent event) async {
     final notificationsEnabled = event.enabled;
     await settingsRepository.setNotificationsEnabled(notificationsEnabled);
+    _initialNotificationsEnabled.add(notificationsEnabled);
   }
 
   void _mapOnNotificationsTimespanChangedEvent(
       OnNotificationsTimespanChangedEvent event) async {
     final timespan = event.timespan;
     await settingsRepository.setNotificationTimespan(timespan);
+    _initialNotificationsTimespan.add(timespan);
   }
 }
