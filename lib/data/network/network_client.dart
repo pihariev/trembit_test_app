@@ -2,8 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:trembit_test_app/data/network/auth_interceptor.dart';
 
-final networkClient =
-    NetworkClient._(dio: Dio(), baseUrl: 'https://api.themoviedb.org/3/');
+final _baseUrl = 'https://api.themoviedb.org/3/';
+
+final networkClient = NetworkClient._(dio: Dio(), baseUrl: _baseUrl);
 
 class NetworkClient {
   static const _connectTimeout = 5000; // millis
@@ -28,5 +29,10 @@ class NetworkClient {
           responseBody: true,
         ),
       );
+  }
+
+  static String buildImageUrl(String path) {
+    assert(path != null);
+    return '$_baseUrl$path';
   }
 }
