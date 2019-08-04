@@ -10,6 +10,8 @@ final IMovieRepository movieRepository =
 
 abstract class IMovieRepository {
   Future<Result<List<Movie>>> getUpcomingMovies();
+
+  Future<Result<Movie>> getMovie(int movieId);
 }
 
 class MovieRepository extends IMovieRepository {
@@ -30,6 +32,19 @@ class MovieRepository extends IMovieRepository {
       return Future.value(result);
     } catch (e) {
       final result = Result<List<Movie>>.error(e.toString());
+      return Future.value(result);
+    }
+  }
+
+  @override
+  Future<Result<Movie>> getMovie(int movieId) async {
+    try {
+      final response = await _movieService.getMovie(movieId);
+      final movie = _movieMapper.map(response);
+      final result = Result.success(movie);
+      return Future.value(result);
+    } catch (e) {
+      final result = Result<Movie>.error(e.toString());
       return Future.value(result);
     }
   }
