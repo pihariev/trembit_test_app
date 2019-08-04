@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:trembit_test_app/bloc/movie_details/movie_details_bloc.dart';
 import 'package:trembit_test_app/bloc/settings/settings_bloc.dart';
 import 'package:trembit_test_app/bloc/upcoming_movies/upcoming_movies_bloc.dart';
@@ -8,10 +9,30 @@ import 'package:trembit_test_app/page/movie_details_page.dart';
 import 'package:trembit_test_app/page/settings_page.dart';
 import 'package:trembit_test_app/page/upcoming_movies_page.dart';
 import 'package:trembit_test_app/route.dart' as AppRoute;
+import 'package:trembit_test_app/utils/notification_manager.dart';
 
-void main() => runApp(MyApp());
+NotificationManager notificationManager;
 
-class MyApp extends StatelessWidget {
+void main() {
+  notificationManager = NotificationManager(FlutterLocalNotificationsPlugin());
+  runApp(MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return _MyAppState();
+  }
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+
+    notificationManager.initWith(_onSelectNotification);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -72,5 +93,10 @@ class MyApp extends StatelessWidget {
           return null;
         }
     }
+  }
+
+  Future<void> _onSelectNotification(String payload) async {
+    await Navigator.of(context).pushNamed(AppRoute.Route.MOVIE_DETAILS_PAGE,
+        arguments: MovieDetailsBundle.withMovieId(int.parse(payload)));
   }
 }
