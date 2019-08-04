@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trembit_test_app/bloc/movie_details/movie_details_bloc.dart';
+import 'package:trembit_test_app/bloc/settings/settings_bloc.dart';
 import 'package:trembit_test_app/bloc/upcoming_movies/upcoming_movies_bloc.dart';
 import 'package:trembit_test_app/model/navigation_bundle/movie_details_bundle.dart';
 import 'package:trembit_test_app/page/movie_details_page.dart';
+import 'package:trembit_test_app/page/settings_page.dart';
 import 'package:trembit_test_app/page/upcoming_movies_page.dart';
 import 'package:trembit_test_app/route.dart' as AppRoute;
 
@@ -49,6 +51,18 @@ class MyApp extends StatelessWidget {
                     ? MovieDetailsBloc.withMovie(bundle.movie)
                     : MovieDetailsBloc.withMovieId(bundle.movieId),
                 child: MovieDetailsPage(),
+              );
+            },
+          );
+        }
+      case AppRoute.Route.SETTINGS_PAGE:
+        {
+          return MaterialPageRoute(
+            settings: settings,
+            builder: (context) {
+              return BlocProvider<SettingsBloc>(
+                builder: (context) => SettingsBloc(),
+                child: SettingsPage(),
               );
             },
           );
