@@ -10,6 +10,7 @@ class MovieMapper extends Mapper<MovieResponse, Movie> {
       title: from.title,
       overview: from.overview,
       releaseDate: DateTime.parse(from.releaseDate),
+      imageUrl: from.posterUrl,
     );
   }
 }

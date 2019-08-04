@@ -7,16 +7,19 @@ class Movie extends Equatable {
   final String title;
   final String overview;
   final DateTime releaseDate;
+  final String imageUrl;
 
   Movie({
     this.id,
     this.title,
     this.overview,
     this.releaseDate,
+    this.imageUrl,
   }) : super([
           id,
           title,
           overview,
           releaseDate,
+          imageUrl,
         ]);
 }
