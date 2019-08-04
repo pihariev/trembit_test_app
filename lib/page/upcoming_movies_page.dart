@@ -26,7 +26,10 @@ class _UpcomingMoviesPageState extends State<UpcomingMoviesPage> {
 
     final bloc = BlocProvider.of<UpcomingMoviesBloc>(context);
     _subscriptions.add(bloc.navigateToMovieDetails.listen(
-      (movie) {},
+      (movie) {
+        Navigator.of(context).pushNamed(AppRoute.Route.MOVIE_DETAILS_PAGE,
+            arguments: MovieDetailsBundle.withMovie(movie));
+      },
     ));
     _subscriptions.add(bloc.navigateToSettings.listen(
       (_) {
@@ -73,7 +76,7 @@ class _UpcomingMoviesPageState extends State<UpcomingMoviesPage> {
           } else {
             return ListView.builder(
               itemCount: result.data.length,
-              itemBuilder: (context, index) => _buildItem(result.data[index]),
+              itemBuilder: (context, index) => _buildItem(bloc, result.data[index]),
             );
           }
         } else {
@@ -85,7 +88,7 @@ class _UpcomingMoviesPageState extends State<UpcomingMoviesPage> {
     );
   }
 
-  Widget _buildItem(Movie movie) {
+  Widget _buildItem(UpcomingMoviesBloc bloc, Movie movie) {
     return ListTile(
       title: Text(movie.title),
       subtitle: Text(movie.releaseDate.toUtc().toIso8601String()),
@@ -93,8 +96,7 @@ class _UpcomingMoviesPageState extends State<UpcomingMoviesPage> {
         NetworkClient.buildImageUrl(movie.imageUrl),
       ),
       onTap: () {
-        Navigator.of(context).pushNamed(AppRoute.Route.MOVIE_DETAILS_PAGE,
-            arguments: MovieDetailsBundle.withMovie(movie));
+        bloc.dispatch(OnMovieItemClickEvent(movie));
       },
     );
   }
