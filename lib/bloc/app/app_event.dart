@@ -16,3 +16,6 @@ class OnMoviesFetchedEvent extends AppEvent {
 
 @immutable
 class OnNotificationTimespanChangedEvent extends AppEvent {}
+
+@immutable
+class OnNotificationsToggledEvent extends AppEvent {}

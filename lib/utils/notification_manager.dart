@@ -27,9 +27,14 @@ class NotificationManager {
   void onDidMoviesFetched(List<Movie> movies) async {
     _lastFetchedMovies = movies;
     await _cancelAllNotifications();
-    final currentTimespan = await settingsRepository.getNotificationTimespan();
-    for (Movie m in _lastFetchedMovies) {
-      await _scheduleNotification(m, currentTimespan);
+    final notificationsEnabled =
+        await settingsRepository.isNotificationsEnabled();
+    if (notificationsEnabled) {
+      final currentTimespan =
+          await settingsRepository.getNotificationTimespan();
+      for (Movie m in _lastFetchedMovies) {
+        await _scheduleNotification(m, currentTimespan);
+      }
     }
   }
 
@@ -37,6 +42,10 @@ class NotificationManager {
     if (_lastFetchedMovies != null && _lastFetchedMovies.isNotEmpty) {
       onDidMoviesFetched(_lastFetchedMovies);
     }
+  }
+
+  void onNotificationsToggled() async {
+    onDidMoviesFetched(_lastFetchedMovies);
   }
 
   Future<void> _scheduleNotification(
@@ -100,7 +109,7 @@ class NotificationManager {
     if (now.isBefore(notifyDate)) {
       return notifyDate;
     } else {
-      return now.add(Duration(minutes: 15));
+      return now.add(Duration(seconds: 10));
     }
   }
 }

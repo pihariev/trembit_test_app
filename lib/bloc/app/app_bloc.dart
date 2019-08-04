@@ -7,6 +7,7 @@ import 'package:trembit_test_app/model/ui/movie.dart';
 class AppBloc extends Bloc<AppEvent, dynamic> {
   final _onMoviesFetched = PublishSubject<List<Movie>>(sync: true);
   final _onTimespanChanged = PublishSubject(sync: true);
+  final _onNotificationsToggled = PublishSubject(sync: true);
 
   @override
   get initialState => null;
@@ -15,12 +16,16 @@ class AppBloc extends Bloc<AppEvent, dynamic> {
 
   Observable get onTimespanChanged => _onTimespanChanged;
 
+  Observable get onNotificationsToggled => _onNotificationsToggled;
+
   @override
   Stream mapEventToState(AppEvent event) async* {
     if (event is OnMoviesFetchedEvent) {
       _mapOnMoviesFetchedEvent(event);
     } else if (event is OnNotificationTimespanChangedEvent) {
       _mapOnTimespanChangedEvent();
+    } else if (event is OnNotificationsToggledEvent) {
+      _mapOnNotificationsToggledEvent();
     }
   }
 
@@ -28,6 +33,7 @@ class AppBloc extends Bloc<AppEvent, dynamic> {
   void dispose() {
     _onMoviesFetched.close();
     _onTimespanChanged.close();
+    _onNotificationsToggled.close();
     super.dispose();
   }
 
@@ -38,5 +44,9 @@ class AppBloc extends Bloc<AppEvent, dynamic> {
 
   void _mapOnTimespanChangedEvent() {
     _onTimespanChanged.add(dynamic);
+  }
+
+  void _mapOnNotificationsToggledEvent() {
+    _onNotificationsToggled.add(dynamic);
   }
 }

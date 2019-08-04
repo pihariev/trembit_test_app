@@ -4,7 +4,20 @@ import 'package:trembit_test_app/bloc/settings/settings_bloc.dart';
 import 'package:trembit_test_app/bloc/settings/settings_event.dart';
 import 'package:trembit_test_app/model/notification_timespan.dart';
 
+typedef OnNotificationsToggledCallback = Function();
+typedef OnNotificationsTimespanChangedCallback = Function();
+
 class SettingsPage extends StatelessWidget {
+  final OnNotificationsToggledCallback onNotificationsToggledCallback;
+  final OnNotificationsTimespanChangedCallback
+      onNotificationsTimespanChangedCallback;
+
+  SettingsPage({
+    Key key,
+    @required this.onNotificationsToggledCallback,
+    @required this.onNotificationsTimespanChangedCallback,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final bloc = BlocProvider.of<SettingsBloc>(context);
@@ -24,8 +37,10 @@ class SettingsPage extends StatelessWidget {
                 return SwitchListTile(
                   title: Text('Enable notifications'),
                   value: snapshot.data,
-                  onChanged: (value) =>
-                      bloc.dispatch(OnShowNotificationsToggleEvent(value)),
+                  onChanged: (value) {
+                    bloc.dispatch(OnShowNotificationsToggleEvent(value));
+                    onNotificationsToggledCallback();
+                  },
                 );
               } else {
                 return SwitchListTile(
@@ -65,8 +80,11 @@ class SettingsPage extends StatelessWidget {
                             value: NotificationTimespan.WEEK,
                           ),
                         ],
-                        onChanged: (value) => bloc.dispatch(
-                            OnNotificationsTimespanChangedEvent(value)),
+                        onChanged: (value) {
+                          bloc.dispatch(
+                              OnNotificationsTimespanChangedEvent(value));
+                          onNotificationsTimespanChangedCallback();
+                        },
                         value: timespan,
                       ),
                     );

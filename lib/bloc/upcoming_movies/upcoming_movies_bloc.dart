@@ -1,16 +1,20 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:trembit_test_app/bloc/upcoming_movies/upcoming_movies_event.dart';
 import 'package:trembit_test_app/data/repository/movie_repository.dart';
 import 'package:trembit_test_app/model/result.dart';
 import 'package:trembit_test_app/model/ui/movie.dart';
 
+typedef OnMoviesFetchedCallback = Function(List<Movie>);
+
 class UpcomingMoviesBloc extends Bloc<UpcomingMoviesEvent, dynamic> {
+  final OnMoviesFetchedCallback onMoviesFetchedCallback;
   final _movies = BehaviorSubject<Result<List<Movie>>>();
   final _navigateToMovieDetails = PublishSubject<Movie>();
   final _navigateToSettings = PublishSubject();
 
-  UpcomingMoviesBloc() {
+  UpcomingMoviesBloc({@required this.onMoviesFetchedCallback}) {
     _fetchUpcomingMovies();
   }
 
@@ -45,6 +49,7 @@ class UpcomingMoviesBloc extends Bloc<UpcomingMoviesEvent, dynamic> {
   void _fetchUpcomingMovies() async {
     final result = await movieRepository.getUpcomingMovies();
     _movies.add(result);
+    onMoviesFetchedCallback(result.data);
   }
 
   void _mapOnMovieItemClickEvent(OnMovieItemClickEvent event) {
