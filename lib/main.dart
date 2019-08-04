@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -11,11 +13,18 @@ import 'package:trembit_test_app/page/upcoming_movies_page.dart';
 import 'package:trembit_test_app/route.dart' as AppRoute;
 import 'package:trembit_test_app/utils/notification_manager.dart';
 
+import 'bloc/app/app_bloc.dart';
+
 NotificationManager notificationManager;
 
 void main() {
   notificationManager = NotificationManager(FlutterLocalNotificationsPlugin());
-  runApp(MyApp());
+  runApp(
+    BlocProvider(
+      builder: (context) => AppBloc(),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -26,11 +35,28 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final _subscriptions = List<StreamSubscription>();
+
   @override
   void initState() {
     super.initState();
 
     notificationManager.initWith(_onSelectNotification);
+    final bloc = BlocProvider.of<AppBloc>(context);
+    _subscriptions.add(
+      bloc.onMoviesFetched
+          .listen((movies) => notificationManager.onDidMoviesFetched(movies)),
+    );
+    _subscriptions.add(
+      bloc.onTimespanChanged
+          .listen((_) => notificationManager.onTimespanChanged()),
+    );
+  }
+
+  @override
+  void dispose() {
+    _subscriptions.forEach((s) => s.cancel());
+    super.dispose();
   }
 
   @override
