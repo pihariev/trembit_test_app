@@ -76,7 +76,7 @@ class MovieDetailsPage extends StatelessWidget {
             }
           } else {
             return Center(
-              child: Text('Something went wrong...'),
+              child: CircularProgressIndicator(),
             );
           }
         },
